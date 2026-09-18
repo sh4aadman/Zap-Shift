@@ -1,43 +1,9 @@
-import { Link, NavLink } from "react-router";
+import { Link } from "react-router";
 import Logo from "../Logo/Logo";
 import { BsArrowUpRightCircleFill } from "react-icons/bs";
+import NavLinks from "../NavLinks/NavLinks";
 
 function Navbar() {
-  const links = (
-    <>
-      <li>
-        <NavLink to={"/services"} className="shadow-none">
-          Services
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to={"/coverage"} className="shadow-none">
-          Coverage
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to={"/about-us"} className="shadow-none">
-          About Us
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to={"/pricing"} className="shadow-none">
-          Pricing
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to={"/blog"} className="shadow-none">
-          Blog
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to={"/contact"} className="shadow-none">
-          Contact
-        </NavLink>
-      </li>
-    </>
-  );
-
   return (
     <div className="navbar p-5 bg-white rounded-2xl">
       <div className="navbar-start">
@@ -64,7 +30,7 @@ function Navbar() {
             tabIndex={-1}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow font-medium text-base text-accent"
           >
-            {links}
+            <NavLinks />
           </ul>
         </div>
         <Link to={"/"}>
@@ -73,7 +39,7 @@ function Navbar() {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="flex items-center gap-5 font-medium text-base text-accent">
-          {links}
+          <NavLinks />
         </ul>
       </div>
       <div className="navbar-end">

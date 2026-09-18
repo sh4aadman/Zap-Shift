@@ -1,17 +1,22 @@
 import Logo from "../Logo/Logo";
+import NavLinks from "../NavLinks/NavLinks";
 
 function Footer() {
   return (
-    <footer className="footer footer-horizontal footer-center bg-primary text-primary-content p-10">
+    <footer className="footer footer-horizontal footer-center bg-[#0B0B0B] rounded-4xl text-primary-content px-28 py-20">
       <aside>
-        <Logo />
-        <p className="font-bold">
-          ACME Industries Ltd.
-          <br />
-          Providing reliable tech since 1992
+        <Logo secondary={true} />
+        <p className="mt-4 text-base text-base-200 leading-6">
+          Enjoy fast, reliable parcel delivery with real-time tracking and zero
+          hassle. From personal packages to <br /> business shipments — we
+          deliver on time, every time.
         </p>
-        <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
       </aside>
+      <hr className="w-full border-dashed border-base-300" />
+      <div className="list-none flex items-center gap-10">
+        <NavLinks secondary={true} />
+      </div>
+      <hr className="w-full border-dashed border-base-300" />
       <nav>
         <div className="grid grid-flow-col gap-4">
           <a>
