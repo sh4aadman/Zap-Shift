@@ -12,11 +12,11 @@ function Footer() {
           deliver on time, every time.
         </p>
       </aside>
-      <hr className="w-full border-dashed border-base-300" />
+      <hr className="w-full border-dashed border-info" />
       <div className="list-none flex items-center gap-10">
         <NavLinks secondary={true} />
       </div>
-      <hr className="w-full border-dashed border-base-300" />
+      <hr className="w-full border-dashed border-info" />
       <nav>
         <div className="grid grid-flow-col gap-4">
           <a>
