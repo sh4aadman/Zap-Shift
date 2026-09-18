@@ -1,3 +1,4 @@
+import AccordionSection from "./components/Accordion/AccordionSection";
 import CallToAction from "./components/CallToAction/CallToAction";
 import Carousel from "./components/Carousel/Carousel";
 import HowItWorks from "./components/HowItWorks/HowItWorks";
@@ -16,6 +17,7 @@ function Home() {
       <ServiceFeatures />
       <hr className="mb-20 mx-24 border-dashed border-info" />
       <CallToAction />
+      <AccordionSection />
     </>
   );
 }

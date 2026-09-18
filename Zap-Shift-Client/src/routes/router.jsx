@@ -7,6 +7,9 @@ import AboutUs from "../pages/AboutUs/AboutUs";
 import Pricing from "../pages/Pricing/Pricing";
 import Blog from "../pages/Blog/Blog";
 import Contact from "../pages/Contact/Contact";
+import AuthLayout from "../layouts/AuthLayout";
+import Login from "../pages/Auth/Login/Login";
+import Register from "../pages/Auth/Register/Register";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +43,20 @@ const router = createBrowserRouter([
       {
         path: "contact",
         Component: Contact,
+      },
+    ],
+  },
+  {
+    path: "/auth",
+    Component: AuthLayout,
+    children: [
+      {
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "register",
+        Component: Register,
       },
     ],
   },
