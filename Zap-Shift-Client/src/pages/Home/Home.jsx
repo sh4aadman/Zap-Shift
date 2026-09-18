@@ -1,3 +1,4 @@
+import CallToAction from "./components/CallToAction/CallToAction";
 import Carousel from "./components/Carousel/Carousel";
 import HowItWorks from "./components/HowItWorks/HowItWorks";
 import OurServices from "./components/OurServices/OurServices";
@@ -11,8 +12,10 @@ function Home() {
       <HowItWorks />
       <OurServices />
       <SalesTeams />
-      <hr className="mb-20 mx-24 border-dashed border-info" />
+      <hr className="mx-24 border-dashed border-info" />
       <ServiceFeatures />
+      <hr className="mb-20 mx-24 border-dashed border-info" />
+      <CallToAction />
     </>
   );
 }
