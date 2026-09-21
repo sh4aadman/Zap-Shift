@@ -10,6 +10,9 @@ import Contact from "../pages/Contact/Contact";
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Auth/Login/Login";
 import Register from "../pages/Auth/Register/Register";
+import ForgetPassword from "../pages/Auth/ForgetPassword/ForgetPassword";
+import Verification from "../pages/Auth/Verification/Verification";
+import ResetPassword from "../pages/Auth/ResetPassword/ResetPassword";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +60,18 @@ const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+      {
+        path: "forget-password",
+        Component: ForgetPassword,
+      },
+      {
+        path: "verify",
+        Component: Verification,
+      },
+      {
+        path: "reset-password",
+        Component: ResetPassword,
       },
     ],
   },
