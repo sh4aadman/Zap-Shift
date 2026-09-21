@@ -13,7 +13,7 @@
   --color-base-100: #303030;
   --color-base-200: #dadada;
   --color-base-300: #eaeced;
-  --color-info: #03464D
+  --color-info: #03464d;
 }
 /* DADADA */
 
@@ -46,4 +46,28 @@ a.active {
   color: #1f1f1f;
   background-color: #caeb66;
   border: 1px solid #caeb66;
+}
+
+.customer-review-pagination {
+  position: static !important;
+  width: auto !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.customer-review-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  margin: 0 !important;
+  border-radius: 9999px;
+  background: #94c6cb;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.customer-review-pagination .swiper-pagination-bullet-active {
+  width: 8px;
+  height: 8px;
+  background: #03373d;
 }
