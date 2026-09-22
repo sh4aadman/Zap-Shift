@@ -33,9 +33,7 @@ function Navbar() {
             <NavLinks />
           </ul>
         </div>
-        <Link to={"/"}>
-          <Logo />
-        </Link>
+        <Logo />
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="flex items-center gap-5 font-medium text-base text-accent">

@@ -5,7 +5,7 @@ function Verification() {
   return (
     <div className="px-14 py-11 bg-white">
       <Logo />
-      <section className="h-full px-44 flex flex-col justify-center">
+      <section className="h-full px-44 flex flex-col justify-center items-start">
         <h2 className="font-inter font-extrabold text-5xl text-black leading-12 tracking-tight">
           Enter Code
         </h2>
