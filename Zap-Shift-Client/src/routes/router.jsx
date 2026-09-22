@@ -13,6 +13,7 @@ import Register from "../pages/Auth/Register/Register";
 import ForgetPassword from "../pages/Auth/ForgetPassword/ForgetPassword";
 import Verification from "../pages/Auth/Verification/Verification";
 import ResetPassword from "../pages/Auth/ResetPassword/ResetPassword";
+import ErrorPage from "../pages/Error/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
         Component: ResetPassword,
       },
     ],
+  },
+  {
+    path: "*",
+    Component: ErrorPage,
   },
 ]);
 
