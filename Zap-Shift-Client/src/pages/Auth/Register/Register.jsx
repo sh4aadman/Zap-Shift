@@ -1,8 +1,23 @@
 import { Link } from "react-router";
 import Logo from "../../../components/Shared/Logo/Logo";
 import imgUploadIcon from "../../../assets/image-upload-icon.png";
+import { useForm } from "react-hook-form";
+import Social from "../../../components/Ui/Social/Social";
 
 function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const formSubmit = (data) => {
+    const name = data.name;
+    const email = data.email;
+    const password = data.password;
+    console.log(name, email, password);
+  };
+
   return (
     <div className="px-14 py-11 bg-white">
       <Logo />
@@ -13,39 +28,71 @@ function Register() {
         <p className="mt-1 font-inter text-base text-black leading-7">
           Register with ZapShift
         </p>
-        <form className="mt-5">
+        <form onSubmit={handleSubmit(formSubmit)} className="mt-5">
           <fieldset className="fieldset">
             <label>
-              <img className="w-12 h-12" src={imgUploadIcon} alt="image-upload-icon" />
+              <img
+                className="w-12 h-12 rounded-full object-cover cursor-pointer"
+                src={imgUploadIcon}
+                alt="image-upload-icon"
+              />
             </label>
-            {/* <input type="file" className="file-input" /> */}
+            <input type="file" className="file-input hidden" />
             <label className="label font-inter font-medium text-sm text-neutral leading-5">
               Name
             </label>
             <input
               type="text"
-              name="name"
+              {...register("name", {
+                required: true,
+                pattern: /^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u,
+              })}
               className="input w-full bg-transparent font-inter text-base text-black leading-6 placeholder:text-neutral-content focus:outline-0"
               placeholder="Name"
             />
+            {errors.name?.type === "required" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Name is required
+              </p>
+            )}
+            {errors.name?.type === "pattern" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Please use a valid name
+              </p>
+            )}
             <label className="label mt-3 font-inter font-medium text-sm text-neutral leading-5">
               Email
             </label>
             <input
               type="email"
-              name="email"
+              {...register("email", { required: true })}
               className="input w-full bg-transparent font-inter text-base text-black leading-6 placeholder:text-neutral-content focus:outline-0"
               placeholder="Email"
             />
+            {errors.email?.type === "required" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Email is required
+              </p>
+            )}
             <label className="label mt-3 font-inter font-medium text-sm text-neutral leading-5">
               Password
             </label>
             <input
               type="password"
-              name="password"
+              {...register("password", { required: true, minLength: 6 })}
               className="input w-full bg-transparent font-inter text-base text-black leading-6 placeholder:text-neutral-content focus:outline-0"
               placeholder="Password"
             />
+            {errors.password?.type === "required" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Password is required
+              </p>
+            )}
+            {errors.password?.type === "minLength" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Password must be at least six(6) characters or longer
+              </p>
+            )}
             <button className="btn btn-primary mt-3 font-inter font-medium text-sm text-black leading-6">
               Register
             </button>
@@ -60,36 +107,7 @@ function Register() {
         <p className="my-3 font-inter text-base text-warning text-center leading-6">
           Or
         </p>
-        <button className="btn bg-[#E9ECF1] border-[#E9ECF1] font-medium text-sm text-black leading-6">
-          <svg
-            aria-label="Google logo"
-            width="24"
-            height="24"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-          >
-            <g>
-              <path d="m0 0H512V512H0" fill="#E9ECF1"></path>
-              <path
-                fill="#34a853"
-                d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"
-              ></path>
-              <path
-                fill="#4285f4"
-                d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"
-              ></path>
-              <path
-                fill="#fbbc02"
-                d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"
-              ></path>
-              <path
-                fill="#ea4335"
-                d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"
-              ></path>
-            </g>
-          </svg>
-          Register with Google
-        </button>
+        <Social />
       </section>
     </div>
   );
