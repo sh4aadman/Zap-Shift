@@ -5,8 +5,6 @@ import Services from "../pages/Services/Services";
 import Coverage from "../pages/Coverage/Coverage";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import Pricing from "../pages/Pricing/Pricing";
-import Blog from "../pages/Blog/Blog";
-import Contact from "../pages/Contact/Contact";
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Auth/Login/Login";
 import Register from "../pages/Auth/Register/Register";
@@ -14,6 +12,8 @@ import ForgetPassword from "../pages/Auth/ForgetPassword/ForgetPassword";
 import Verification from "../pages/Auth/Verification/Verification";
 import ResetPassword from "../pages/Auth/ResetPassword/ResetPassword";
 import ErrorPage from "../pages/Error/ErrorPage";
+import BeRider from "../pages/BeRider/BeRider";
+import PrivateRoutes from "./PrivateRoutes/PrivateRoutes";
 
 const router = createBrowserRouter([
   {
@@ -41,12 +41,12 @@ const router = createBrowserRouter([
         Component: Pricing,
       },
       {
-        path: "blog",
-        Component: Blog,
-      },
-      {
-        path: "contact",
-        Component: Contact,
+        path: "be-rider",
+        element: (
+          <PrivateRoutes>
+            <BeRider />
+          </PrivateRoutes>
+        ),
       },
     ],
   },

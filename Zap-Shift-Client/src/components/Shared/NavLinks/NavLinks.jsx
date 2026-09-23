@@ -1,6 +1,9 @@
 import { NavLink } from "react-router";
+import useAuth from "../../../hooks/useAuth";
 
 function NavLinks({ secondary }) {
+  const { user } = useAuth();
+
   return (
     <>
       <li>
@@ -37,18 +40,10 @@ function NavLinks({ secondary }) {
       </li>
       <li>
         <NavLink
-          to={"/blog"}
-          className={`shadow-none ${secondary ? "text-base-200" : ""}`}
+          to={"/be-rider"}
+          className={`shadow-none ${secondary ? "text-base-200" : ""} ${user && "text-[#5B6A2E]"}`}
         >
-          Blog
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to={"/contact"}
-          className={`shadow-none ${secondary ? "text-base-200" : ""}`}
-        >
-          Contact
+          Be a Rider
         </NavLink>
       </li>
     </>

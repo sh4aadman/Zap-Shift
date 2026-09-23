@@ -1,8 +1,11 @@
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Logo from "../../../components/Shared/Logo/Logo";
 import imgUploadIcon from "../../../assets/image-upload-icon.png";
 import { useForm } from "react-hook-form";
 import Social from "../../../components/Ui/Social/Social";
+import { useEffect, useRef, useState } from "react";
+import useAuth from "../../../hooks/useAuth";
+import axios from "axios";
 
 function Register() {
   const {
@@ -11,12 +14,77 @@ function Register() {
     formState: { errors },
   } = useForm();
 
+  const [preview, setPreview] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const { signupUser, updateUser } = useAuth();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const userImg = register("userImg", {
+    required: "Image is required",
+    validate: {
+      imageType: (files) =>
+        files?.[0]?.type?.startsWith("image/") ||
+        "Please select an image file.",
+    },
+  });
+
+  const openFilePicker = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setPreview(null);
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      setPreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(file);
+    setPreview(objectUrl);
+  };
+
   const formSubmit = (data) => {
     const name = data.name;
     const email = data.email;
     const password = data.password;
-    console.log(name, email, password);
+    const image = data.userImg[0];
+    signupUser(email, password)
+      .then(() => {
+        const formData = new FormData();
+        formData.append("image", image);
+        const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_Host_Key}`;
+        axios.post(imageUploadUrl, formData).then((res) => {
+          const userProfile = {
+            displayName: name,
+            photoURL: res.data.data.url,
+          };
+          updateUser(userProfile)
+            .then(() => {
+              navigate(location?.state || "/");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   return (
     <div className="px-14 py-11 bg-white">
@@ -31,14 +99,42 @@ function Register() {
         <form onSubmit={handleSubmit(formSubmit)} className="mt-5">
           <fieldset className="fieldset">
             <label>
-              <img
-                className="w-12 h-12 rounded-full object-cover cursor-pointer"
-                src={imgUploadIcon}
-                alt="image-upload-icon"
-              />
+              {preview ? (
+                <img
+                  onClick={openFilePicker}
+                  className="w-12 h-12 rounded-full object-cover cursor-pointer"
+                  src={preview}
+                  alt="profile-preview"
+                />
+              ) : (
+                <img
+                  onClick={openFilePicker}
+                  className="w-12 h-12 rounded-full object-cover cursor-pointer"
+                  src={imgUploadIcon}
+                  alt="image-upload-icon"
+                />
+              )}
             </label>
-            <input type="file" className="file-input hidden" />
-            <label className="label font-inter font-medium text-sm text-neutral leading-5">
+            <input
+              {...userImg}
+              ref={(e) => {
+                userImg.ref(e);
+                fileInputRef.current = e;
+              }}
+              type="file"
+              accept="image/*"
+              className="file-input hidden"
+              onChange={(e) => {
+                userImg.onChange(e);
+                handleFileChange(e);
+              }}
+            />
+            {errors.userImg && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                {errors.userImg.message}
+              </p>
+            )}
+            <label className="label mt-3 font-inter font-medium text-sm text-neutral leading-5">
               Name
             </label>
             <input
@@ -100,7 +196,11 @@ function Register() {
         </form>
         <p className="mt-3 font-inter text-base text-warning">
           Already have any account?{" "}
-          <Link to={"/auth/login"} className="text-warning-content">
+          <Link
+            state={location?.state}
+            to={"/auth/login"}
+            className="text-warning-content"
+          >
             Login
           </Link>
         </p>

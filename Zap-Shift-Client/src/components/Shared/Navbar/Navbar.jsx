@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Logo from "../Logo/Logo";
 import { BsArrowUpRightCircleFill } from "react-icons/bs";
 import NavLinks from "../NavLinks/NavLinks";
@@ -6,11 +6,13 @@ import useAuth from "../../../hooks/useAuth";
 
 function Navbar() {
   const { user, signoutUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     signoutUser()
       .then(() => {
-        console.log("logged out");
+        navigate(location?.pathname || "/");
       })
       .catch((error) => {
         console.log(error);
@@ -78,6 +80,7 @@ function Navbar() {
           <>
             <Link
               id="button"
+              state={location?.pathname}
               to={"/auth/login"}
               className="mr-2 px-4 py-2.5 border border-base-200 rounded-2xl font-bold text-lg text-accent"
             >
@@ -85,6 +88,7 @@ function Navbar() {
             </Link>
             <Link
               id="button"
+              state={location?.pathname}
               to={"/auth/register"}
               className="px-4 py-2.5 border border-base-200 rounded-2xl font-bold text-lg text-accent"
             >

@@ -36,7 +36,7 @@ body {
   background-color: #eaeced;
 }
 
-a.active {
+ul a.active {
   color: #1f1f1f;
   background-color: #caeb66;
   padding: 6px 12px;

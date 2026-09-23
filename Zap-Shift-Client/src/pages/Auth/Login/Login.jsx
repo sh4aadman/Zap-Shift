@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Logo from "../../../components/Shared/Logo/Logo";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
@@ -13,12 +13,16 @@ function Login() {
 
   const { signinUser } = useAuth();
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const formSubmit = (data) => {
     const email = data.email;
     const password = data.password;
     signinUser(email, password)
       .then((creds) => {
         console.log(creds.user);
+        navigate(location?.state || "/");
       })
       .catch((error) => {
         console.log(error);
@@ -85,7 +89,11 @@ function Login() {
         </form>
         <p className="mt-3 font-inter text-base text-warning">
           Don’t have any account?{" "}
-          <Link to={"/auth/register"} className="text-warning-content">
+          <Link
+            state={location?.state}
+            to={"/auth/register"}
+            className="text-warning-content"
+          >
             Register
           </Link>
         </p>
