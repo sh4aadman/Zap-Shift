@@ -15,6 +15,10 @@ import ErrorPage from "../pages/Error/ErrorPage";
 import BeRider from "../pages/BeRider/BeRider";
 import PrivateRoutes from "./PrivateRoutes/PrivateRoutes";
 import SendParcel from "../pages/SendParcel/SendParcel";
+import Story from "../pages/AboutUs/components/Story/Story";
+import Mission from "../pages/AboutUs/components/Mission/Mission";
+import Success from "../pages/AboutUs/components/Success/Success";
+import TeamAndOthers from "../pages/AboutUs/components/TeamAndOthers/TeamAndOthers";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +40,28 @@ const router = createBrowserRouter([
       {
         path: "about-us",
         Component: AboutUs,
+        children: [
+          {
+            index: true,
+            element: <Navigate to={"story"} replace />,
+          },
+          {
+            path: "story",
+            Component: Story,
+          },
+          {
+            path: "mission",
+            Component: Mission,
+          },
+          {
+            path: "success",
+            Component: Success,
+          },
+          {
+            path: "team-and-others",
+            Component: TeamAndOthers,
+          },
+        ],
       },
       {
         path: "pricing",

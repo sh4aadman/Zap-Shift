@@ -3,7 +3,7 @@ import riderAgent from "../../assets/agent-pending.png";
 function BeRider() {
   return (
     <div className="mt-14 mb-16 px-28 py-20 rounded-4xl bg-white">
-      <h2 className="mb-4 font-extrabold text-6xl text-secondary">
+      <h2 className="mb-4 font-extrabold text-5xl text-secondary">
         Be a Rider
       </h2>
       <p className="mb-12 text-base text-accent leading-7">
