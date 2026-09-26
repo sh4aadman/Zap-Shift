@@ -40,6 +40,14 @@ function NavLinks({ secondary }) {
       </li>
       <li>
         <NavLink
+          to={"/send-parcel"}
+          className={`shadow-none ${secondary ? "text-base-200" : ""}`}
+        >
+          Send Parcel
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
           to={"/be-rider"}
           className={`shadow-none ${secondary ? "text-base-200" : ""} ${user && "text-[#5B6A2E]"}`}
         >

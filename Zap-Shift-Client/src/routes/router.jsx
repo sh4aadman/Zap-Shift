@@ -14,6 +14,7 @@ import ResetPassword from "../pages/Auth/ResetPassword/ResetPassword";
 import ErrorPage from "../pages/Error/ErrorPage";
 import BeRider from "../pages/BeRider/BeRider";
 import PrivateRoutes from "./PrivateRoutes/PrivateRoutes";
+import SendParcel from "../pages/SendParcel/SendParcel";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "pricing",
         Component: Pricing,
+      },
+      {
+        path: "send-parcel",
+        Component: SendParcel,
       },
       {
         path: "be-rider",
