@@ -19,6 +19,14 @@ import Story from "../pages/AboutUs/components/Story/Story";
 import Mission from "../pages/AboutUs/components/Mission/Mission";
 import Success from "../pages/AboutUs/components/Success/Success";
 import TeamAndOthers from "../pages/AboutUs/components/TeamAndOthers/TeamAndOthers";
+import Loading from "../components/Ui/Loading/Loading";
+import DashboardLayout from "../layouts/DashboardLayout";
+import Dashboard from "../pages/Dashboard/Dashboard/Dashboard";
+import Deliveries from "../pages/Dashboard/Deliveries/Deliveries";
+import Invoices from "../pages/Dashboard/Invoices/Invoices";
+import Stores from "../pages/Dashboard/Stores/Stores";
+import PricingPlan from "../pages/Dashboard/PricingPlan/PricingPlan";
+import CoverageArea from "../pages/Dashboard/CoverageArea/CoverageArea";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +78,8 @@ const router = createBrowserRouter([
       {
         path: "send-parcel",
         Component: SendParcel,
+        loader: () => fetch("./warehouses.json"),
+        hydrateFallbackElement: <Loading />,
       },
       {
         path: "be-rider",
@@ -108,6 +118,44 @@ const router = createBrowserRouter([
       {
         path: "reset-password",
         Component: ResetPassword,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoutes>
+        <DashboardLayout />
+      </PrivateRoutes>
+    ),
+    children: [
+      {
+        index: true,
+        element: <Navigate to={"overview"} replace />,
+      },
+      {
+        path: "overview",
+        Component: Dashboard,
+      },
+      {
+        path: "deliveries",
+        Component: Deliveries,
+      },
+      {
+        path: "invoices",
+        Component: Invoices,
+      },
+      {
+        path: "stores",
+        Component: Stores,
+      },
+      {
+        path: "pricing-plan",
+        Component: PricingPlan,
+      },
+      {
+        path: "coverage-area",
+        Component: CoverageArea,
       },
     ],
   },

@@ -67,7 +67,7 @@ function Navbar() {
               <h4 className="font-semibold text-base text-[#1f1f1f] tracking-wide">
                 {user?.displayName}
               </h4>
-              <p>{user?.email}</p>
+              <p className="text-sm text-accent tracking-wide">{user?.email}</p>
             </div>
             <button
               onClick={handleLogout}

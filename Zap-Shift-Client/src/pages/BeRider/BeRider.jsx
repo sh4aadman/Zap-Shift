@@ -22,7 +22,7 @@ function BeRider() {
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Your Name"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -30,7 +30,7 @@ function BeRider() {
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Driving License Number"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -38,7 +38,7 @@ function BeRider() {
             </label>
             <input
               type="email"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Your Email"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -46,7 +46,7 @@ function BeRider() {
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Select your region"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -54,7 +54,7 @@ function BeRider() {
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Select your district"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -62,7 +62,7 @@ function BeRider() {
             </label>
             <input
               type="number"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="NID"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -70,7 +70,7 @@ function BeRider() {
             </label>
             <input
               type="tel"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Phone Number"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -78,7 +78,7 @@ function BeRider() {
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Bike Brand, Model and Year"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -86,14 +86,14 @@ function BeRider() {
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Bike Registration Number"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Tell Us About Yourself
             </label>
             <textarea
-              className="input h-20 w-full py-2 bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              className="input h-20 w-full py-2 bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Tell Us About Yourself"
             />
             <button className="mt-5 px-16 py-2.5 bg-primary rounded-lg font-inter font-medium text-sm text-black leading-6 cursor-pointer">

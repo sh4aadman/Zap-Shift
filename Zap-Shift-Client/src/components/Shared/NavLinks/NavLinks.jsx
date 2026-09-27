@@ -54,6 +54,14 @@ function NavLinks({ secondary }) {
           Be a Rider
         </NavLink>
       </li>
+      <li>
+        <NavLink
+          to={"/dashboard"}
+          className={`shadow-none ${secondary ? "text-base-200" : ""}`}
+        >
+          Dashboard
+        </NavLink>
+      </li>
     </>
   );
 }

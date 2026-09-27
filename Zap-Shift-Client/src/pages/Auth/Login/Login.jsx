@@ -20,8 +20,7 @@ function Login() {
     const email = data.email;
     const password = data.password;
     signinUser(email, password)
-      .then((creds) => {
-        console.log(creds.user);
+      .then(() => {
         navigate(location?.state || "/");
       })
       .catch((error) => {

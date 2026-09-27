@@ -1,4 +1,71 @@
+import { useCallback, useEffect, useMemo } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { useLoaderData } from "react-router";
+
 function SendParcel() {
+  const { register, handleSubmit, control, setValue } = useForm();
+  const [senderRegion, receiverRegion] = useWatch({
+    control,
+    name: ["sender-region", "receiver-region"],
+  });
+
+  const locations = useLoaderData();
+
+  const regions = useMemo(() => {
+    const regionsTotal = locations.map((l) => l.region);
+    return [...new Set(regionsTotal)];
+  }, [locations]);
+
+  const districtsByRegion = useCallback(
+    (region) => {
+      const districtsInRegion = locations.filter((l) => l.region === region);
+      const districts = districtsInRegion.map((d) => d.district);
+      return districts;
+    },
+    [locations],
+  );
+
+  useEffect(() => {
+    setValue("sender-region", regions[0] || "");
+    setValue("receiver-region", regions[0] || "");
+  }, [regions, setValue]);
+
+  useEffect(() => {
+    const disrticts = districtsByRegion(senderRegion);
+    setValue("sender-district", disrticts[0] || "", { shouldValidate: true });
+  }, [senderRegion, districtsByRegion, setValue]);
+
+  useEffect(() => {
+    const disrticts = districtsByRegion(receiverRegion);
+    setValue("receiver-district", disrticts[0] || "", { shouldValidate: true });
+  }, [receiverRegion, districtsByRegion, setValue]);
+
+  const handleParcelSubmit = (data) => {
+    console.log(data);
+    const isDocument = data["document-type"] === "document";
+    const isSameDistrict =
+      data["sender-district"] === data["receiver-district"];
+    const parcelWeight = parseFloat(data["parcel-weight"]);
+
+    let cost;
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcelWeight <= 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const minCharge = isSameDistrict ? 110 : 150;
+        const extraWeight = parcelWeight - 3;
+        const extraCharge = isSameDistrict
+          ? extraWeight * 40
+          : 40 + extraWeight * 40;
+        cost = minCharge + extraCharge;
+      }
+    }
+
+    console.log(cost);
+  };
+
   return (
     <div className="mt-14 mb-16 px-28 py-20 rounded-4xl bg-white">
       <h2 className="mb-12 font-extrabold text-5xl text-secondary">
@@ -8,13 +75,13 @@ function SendParcel() {
         Enter your parcel details
       </p>
       <hr className="my-8 border-t border-black/10" />
-      <form>
+      <form onSubmit={handleSubmit(handleParcelSubmit)}>
         {/* Parcel Details */}
         <fieldset className="fieldset">
           <div className="mb-8">
             <input
               type="radio"
-              name="document-type"
+              {...register("document-type")}
               value={"document"}
               className="radio text-white bg-base-200 border-base-200 checked:border-[#0AB010] checked:bg-[#0AB010]"
               defaultChecked
@@ -24,7 +91,7 @@ function SendParcel() {
             </label>
             <input
               type="radio"
-              name="document-type"
+              {...register("document-type")}
               value={"non-document"}
               className="radio ml-12 text-white bg-base-200 border-base-200 checked:border-[#0AB010] checked:bg-[#0AB010]"
             />
@@ -39,7 +106,8 @@ function SendParcel() {
               </label>
               <input
                 type="text"
-                className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+                {...register("parcel-name")}
+                className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
                 placeholder="Parcel Name"
               />
             </div>
@@ -49,7 +117,8 @@ function SendParcel() {
               </label>
               <input
                 type="number"
-                className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+                {...register("parcel-weight")}
+                className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
                 placeholder="Parcel Weight (KG)"
               />
             </div>
@@ -67,31 +136,53 @@ function SendParcel() {
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              {...register("sender-name")}
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Sender Name"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Sender Region
             </label>
-            <input
-              type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
-              placeholder="Select your region"
-            />
+            <select
+              defaultValue="Pick a region"
+              {...register("sender-region", { required: true })}
+              className="select w-full bg-white font-inter text-base leading-5 outline-0 "
+            >
+              {regions.map((region, index) => (
+                <option
+                  key={index}
+                  value={region}
+                  className="active:bg-white active:text-neutral active:shadow-none"
+                >
+                  {region}
+                </option>
+              ))}
+            </select>
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Sender District
             </label>
-            <input
-              type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
-              placeholder="Select your district"
-            />
+            <select
+              defaultValue="Pick a district"
+              {...register("sender-district")}
+              className="select w-full bg-white font-inter text-base leading-5 outline-0"
+            >
+              {districtsByRegion(senderRegion).map((district, index) => (
+                <option
+                  key={index}
+                  value={district}
+                  className="active:bg-white active:text-neutral active:shadow-none"
+                >
+                  {district}
+                </option>
+              ))}
+            </select>
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Sender Address
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              {...register("sender-address")}
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Address"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -99,14 +190,16 @@ function SendParcel() {
             </label>
             <input
               type="tel"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              {...register("sender-phone")}
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Sender Phone No"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Pickup Instruction
             </label>
             <textarea
-              className="input h-20 w-full py-2 bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              {...register("pickup-instruction")}
+              className="input h-20 w-full py-2 bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Pickup Instruction"
             />
           </fieldset>
@@ -120,31 +213,53 @@ function SendParcel() {
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              {...register("receiver-name")}
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Receiver Name"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Receiver Region
             </label>
-            <input
-              type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
-              placeholder="Select receiver region"
-            />
+            <select
+              defaultValue="Pick a region"
+              {...register("receiver-region")}
+              className="select w-full bg-white font-inter text-base leading-5 outline-0 "
+            >
+              {regions.map((region, index) => (
+                <option
+                  key={index}
+                  value={region}
+                  className="active:bg-white active:text-neutral active:shadow-none"
+                >
+                  {region}
+                </option>
+              ))}
+            </select>
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Receiver District
             </label>
-            <input
-              type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
-              placeholder="Select receiver district"
-            />
+            <select
+              defaultValue="Pick a district"
+              {...register("receiver-district")}
+              className="select w-full bg-white font-inter text-base leading-5 outline-0"
+            >
+              {districtsByRegion(receiverRegion).map((district, index) => (
+                <option
+                  key={index}
+                  value={district}
+                  className="active:bg-white active:text-neutral active:shadow-none"
+                >
+                  {district}
+                </option>
+              ))}
+            </select>
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Receiver Address
             </label>
             <input
               type="text"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              {...register("receiver-address")}
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Address"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
@@ -152,26 +267,30 @@ function SendParcel() {
             </label>
             <input
               type="tel"
-              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
+              {...register("receiver-phone")}
+              className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Receiver Phone No"
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Delivery Instruction
             </label>
             <textarea
-              className="input h-20 w-full py-2 bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content"
-              rows={10}
+              {...register("delivery-instruction")}
+              className="input h-20 w-full py-2 bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Delivery Instruction"
             />
           </fieldset>
         </div>
+        <p className="my-12 font-inter text-base text-black leading-6">
+          * PickUp Time 4pm-7pm Approx.
+        </p>
+        <button
+          type="submit"
+          className="px-16 py-2.5 bg-primary rounded-lg font-inter font-medium text-sm text-black leading-6 cursor-pointer"
+        >
+          Proceed to Confirm Booking
+        </button>
       </form>
-      <p className="my-12 font-inter text-base text-black leading-6">
-        * PickUp Time 4pm-7pm Approx.
-      </p>
-      <button className="px-16 py-2.5 bg-primary rounded-lg font-inter font-medium text-sm text-black leading-6 cursor-pointer">
-        Proceed to Confirm Booking
-      </button>
     </div>
   );
 }
