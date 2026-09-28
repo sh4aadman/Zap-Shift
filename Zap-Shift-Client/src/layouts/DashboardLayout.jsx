@@ -62,9 +62,9 @@ function DashboardLayout() {
             <li className="is-drawer-close:tooltip is-drawer-close:tooltip-right is-drawer-close:hidden">
               <Logo />
             </li>
-            <hr className="my-3 border-t border-t-[#F0F0F0] is-drawer-close:hidden" />
+            <hr className="my-3 border-t border-t-[#F0F0F0] is-drawer-close:invisible is-drawer-close:w-0" />
             <li>
-              <p className="mb-3 font-medium text-sm text-[#151726] uppercase is-drawer-close:hidden">
+              <p className="mb-3 font-medium text-sm text-[#151726] uppercase is-drawer-close:invisible is-drawer-close:w-0">
                 Menu
               </p>
             </li>

@@ -1,4 +1,5 @@
 import { FaFileInvoice } from "react-icons/fa";
+import { GiCardboardBoxClosed } from "react-icons/gi";
 import { MdDeliveryDining, MdLocationPin, MdOutlineDashboard, MdOutlinePriceChange, MdOutlineStorefront } from "react-icons/md";
 import { NavLink } from "react-router";
 
@@ -15,6 +16,18 @@ function MenuLinks() {
         >
           <MdOutlineDashboard className="text-xl" />
           <span className="is-drawer-close:hidden">Dashboard</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to={"/dashboard/parcels"}
+          className={({ isActive }) =>
+            `is-drawer-close:tooltip is-drawer-close:tooltip-right mb-4 rounded-xl text-sm hover:bg-primary hover:font-bold hover:text-[#1F1F1F] shadow-none ${isActive ? "bg-primary font-bold text-[#1f1f1f]" : "bg-transparent font-medium text-accent"}`
+          }
+          data-tip="Parcels"
+        >
+          <GiCardboardBoxClosed className="text-xl" />
+          <span className="is-drawer-close:hidden">Parcels</span>
         </NavLink>
       </li>
       <li>

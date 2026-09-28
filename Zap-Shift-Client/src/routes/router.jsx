@@ -27,6 +27,7 @@ import Invoices from "../pages/Dashboard/Invoices/Invoices";
 import Stores from "../pages/Dashboard/Stores/Stores";
 import PricingPlan from "../pages/Dashboard/PricingPlan/PricingPlan";
 import CoverageArea from "../pages/Dashboard/CoverageArea/CoverageArea";
+import Parcels from "../pages/Dashboard/Parcels/Parcels";
 
 const router = createBrowserRouter([
   {
@@ -136,6 +137,10 @@ const router = createBrowserRouter([
       {
         path: "overview",
         Component: Dashboard,
+      },
+      {
+        path: "parcels",
+        Component: Parcels,
       },
       {
         path: "deliveries",

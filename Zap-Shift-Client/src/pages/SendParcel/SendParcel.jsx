@@ -1,8 +1,15 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
+import { toast, Toaster } from "sonner";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 function SendParcel() {
+  const { user } = useAuth();
+
+  const axiosSecure = useAxiosSecure();
+
   const { register, handleSubmit, control, setValue } = useForm();
   const [senderRegion, receiverRegion] = useWatch({
     control,
@@ -26,6 +33,10 @@ function SendParcel() {
   );
 
   useEffect(() => {
+    setValue("sender-name", user?.displayName || "");
+  }, [setValue, user?.displayName]);
+
+  useEffect(() => {
     setValue("sender-region", regions[0] || "");
     setValue("receiver-region", regions[0] || "");
   }, [regions, setValue]);
@@ -41,7 +52,7 @@ function SendParcel() {
   }, [receiverRegion, districtsByRegion, setValue]);
 
   const handleParcelSubmit = (data) => {
-    console.log(data);
+    const email = user?.email;
     const isDocument = data["document-type"] === "document";
     const isSameDistrict =
       data["sender-district"] === data["receiver-district"];
@@ -62,8 +73,18 @@ function SendParcel() {
         cost = minCharge + extraCharge;
       }
     }
-
-    console.log(cost);
+    toast(`Total cost is ${cost} Taka. Are you swant to proceed?`, {
+      action: {
+        label: "Proceed",
+        onClick: () => {
+          axiosSecure
+            .post("/parcels", { ...data, "sender-email": email, cost })
+            .then((res) => {
+              console.log("after posting", res.data);
+            });
+        },
+      },
+    });
   };
 
   return (
@@ -138,7 +159,8 @@ function SendParcel() {
               type="text"
               {...register("sender-name")}
               className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
-              placeholder="Sender Name"
+              defaultValue={user?.displayName}
+              readOnly
             />
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Sender Region
@@ -291,6 +313,7 @@ function SendParcel() {
           Proceed to Confirm Booking
         </button>
       </form>
+      <Toaster />
     </div>
   );
 }
