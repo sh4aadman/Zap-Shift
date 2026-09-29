@@ -28,6 +28,9 @@ import Stores from "../pages/Dashboard/Stores/Stores";
 import PricingPlan from "../pages/Dashboard/PricingPlan/PricingPlan";
 import CoverageArea from "../pages/Dashboard/CoverageArea/CoverageArea";
 import Parcels from "../pages/Dashboard/Parcels/Parcels";
+import Payment from "../pages/SendParcel/components/Payment/Payment";
+import PaymentSuccess from "../pages/SendParcel/components/PaymentSuccess/PaymentSuccess";
+import PaymentCancel from "../pages/SendParcel/components/PaymentCancel/PaymentCancel";
 
 const router = createBrowserRouter([
   {
@@ -78,9 +81,25 @@ const router = createBrowserRouter([
       },
       {
         path: "send-parcel",
-        Component: SendParcel,
+        element: (
+          <PrivateRoutes>
+            <SendParcel />
+          </PrivateRoutes>
+        ),
         loader: () => fetch("./warehouses.json"),
         hydrateFallbackElement: <Loading />,
+      },
+      {
+        path: "payment/:id",
+        Component: Payment,
+      },
+      {
+        path: "checkout/payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "checkout/payment-cancelled",
+        Component: PaymentCancel,
       },
       {
         path: "be-rider",

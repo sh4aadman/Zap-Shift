@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { toast, Toaster } from "sonner";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -10,7 +10,19 @@ function SendParcel() {
 
   const axiosSecure = useAxiosSecure();
 
-  const { register, handleSubmit, control, setValue } = useForm();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      "document-type": "document",
+    },
+  });
   const [senderRegion, receiverRegion] = useWatch({
     control,
     name: ["sender-region", "receiver-region"],
@@ -73,14 +85,17 @@ function SendParcel() {
         cost = minCharge + extraCharge;
       }
     }
-    toast(`Total cost is ${cost} Taka. Are you swant to proceed?`, {
+    toast(`Total cost is ${cost} Taka. Do you want to proceed?`, {
       action: {
         label: "Proceed",
         onClick: () => {
           axiosSecure
             .post("/parcels", { ...data, "sender-email": email, cost })
             .then((res) => {
-              console.log("after posting", res.data);
+              if (res.data.insertedId) {
+                const parcelId = res.data.insertedId;
+                navigate(`/payment/${parcelId}`);
+              }
             });
         },
       },
@@ -97,26 +112,32 @@ function SendParcel() {
       </p>
       <hr className="my-8 border-t border-black/10" />
       <form onSubmit={handleSubmit(handleParcelSubmit)}>
-        {/* Parcel Details */}
         <fieldset className="fieldset">
           <div className="mb-8">
             <input
+              id="document"
               type="radio"
               {...register("document-type")}
-              value={"document"}
+              value="document"
               className="radio text-white bg-base-200 border-base-200 checked:border-[#0AB010] checked:bg-[#0AB010]"
-              defaultChecked
             />
-            <label className="ml-2.5 font-semibold text-base text-secondary">
+            <label
+              htmlFor="document"
+              className="ml-2.5 font-semibold text-base text-secondary"
+            >
               Document
             </label>
             <input
+              id="non-document"
               type="radio"
               {...register("document-type")}
-              value={"non-document"}
+              value="non-document"
               className="radio ml-12 text-white bg-base-200 border-base-200 checked:border-[#0AB010] checked:bg-[#0AB010]"
             />
-            <label className="ml-2.5 font-semibold text-base text-secondary">
+            <label
+              htmlFor="non-document"
+              className="ml-2.5 font-semibold text-base text-secondary"
+            >
               Non-Document
             </label>
           </div>
@@ -127,10 +148,15 @@ function SendParcel() {
               </label>
               <input
                 type="text"
-                {...register("parcel-name")}
+                {...register("parcel-name", { required: true })}
                 className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
                 placeholder="Parcel Name"
               />
+              {errors["parcel-name"]?.type === "required" && (
+                <p className="font-inter font-medium text-xs text-red-500">
+                  Parcel Name is required
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <label className="label font-inter font-medium text-sm text-neutral leading-5">
@@ -138,16 +164,20 @@ function SendParcel() {
               </label>
               <input
                 type="number"
-                {...register("parcel-weight")}
+                {...register("parcel-weight", { required: true })}
                 className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
                 placeholder="Parcel Weight (KG)"
               />
+              {errors["parcel-weight"]?.type === "required" && (
+                <p className="font-inter font-medium text-xs text-red-500">
+                  Parcel Weight is required
+                </p>
+              )}
             </div>
           </div>
         </fieldset>
         <hr className="my-7 border-t border-black/10" />
         <div className="grid grid-cols-2 gap-8">
-          {/* Sender Details */}
           <fieldset className="fieldset">
             <h3 className="mb-8 font-extrabold text-lg text-secondary">
               Sender Details
@@ -157,17 +187,22 @@ function SendParcel() {
             </label>
             <input
               type="text"
-              {...register("sender-name")}
+              {...register("sender-name", { required: true })}
               className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               defaultValue={user?.displayName}
-              readOnly
+              placeholder="Sender Name"
             />
+            {errors["sender-name"]?.type === "required" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Sender Name is required
+              </p>
+            )}
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Sender Region
             </label>
             <select
               defaultValue="Pick a region"
-              {...register("sender-region", { required: true })}
+              {...register("sender-region")}
               className="select w-full bg-white font-inter text-base leading-5 outline-0 "
             >
               {regions.map((region, index) => (
@@ -203,19 +238,29 @@ function SendParcel() {
             </label>
             <input
               type="text"
-              {...register("sender-address")}
+              {...register("sender-address", { required: true })}
               className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
-              placeholder="Address"
+              placeholder="Sender Address"
             />
+            {errors["sender-address"]?.type === "required" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Sender Address is required
+              </p>
+            )}
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Sender Phone No
             </label>
             <input
               type="tel"
-              {...register("sender-phone")}
+              {...register("sender-phone", { required: true })}
               className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Sender Phone No"
             />
+            {errors["sender-phone"]?.type === "required" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Sender Phone Number is required
+              </p>
+            )}
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Pickup Instruction
             </label>
@@ -225,7 +270,6 @@ function SendParcel() {
               placeholder="Pickup Instruction"
             />
           </fieldset>
-          {/* Receiver Details */}
           <fieldset className="fieldset">
             <h3 className="mb-8 font-extrabold text-lg text-secondary">
               Receiver Details
@@ -235,10 +279,15 @@ function SendParcel() {
             </label>
             <input
               type="text"
-              {...register("receiver-name")}
+              {...register("receiver-name", { required: true })}
               className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Receiver Name"
             />
+            {errors["receiver-name"]?.type === "required" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Receiver Name is required
+              </p>
+            )}
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Receiver Region
             </label>
@@ -280,19 +329,29 @@ function SendParcel() {
             </label>
             <input
               type="text"
-              {...register("receiver-address")}
+              {...register("receiver-address", { required: true })}
               className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
-              placeholder="Address"
+              placeholder="Receiver Address"
             />
+            {errors["receiver-address"]?.type === "required" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Receiver Address is required
+              </p>
+            )}
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Receiver Phone No
             </label>
             <input
               type="tel"
-              {...register("receiver-phone")}
+              {...register("receiver-phone", { required: true })}
               className="input w-full bg-transparent font-inter text-base leading-5 placeholder:text-neutral-content focus:outline-0"
               placeholder="Receiver Phone No"
             />
+            {errors["receiver-phone"]?.type === "required" && (
+              <p className="font-inter font-medium text-xs text-red-500">
+                Receiver Phone Number is required
+              </p>
+            )}
             <label className="label mt-5 font-inter font-medium text-sm text-neutral leading-5">
               Delivery Instruction
             </label>
@@ -306,10 +365,7 @@ function SendParcel() {
         <p className="my-12 font-inter text-base text-black leading-6">
           * PickUp Time 4pm-7pm Approx.
         </p>
-        <button
-          type="submit"
-          className="px-16 py-2.5 bg-primary rounded-lg font-inter font-medium text-sm text-black leading-6 cursor-pointer"
-        >
+        <button className="px-16 py-2.5 bg-primary rounded-lg font-inter font-medium text-sm text-black leading-6 cursor-pointer">
           Proceed to Confirm Booking
         </button>
       </form>
